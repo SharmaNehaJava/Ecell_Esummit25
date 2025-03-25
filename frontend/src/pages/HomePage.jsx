@@ -5,6 +5,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import Events from "./Events";
+import Workshops from "./Workshops";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -307,6 +308,7 @@ const HomePage = () => {
 
             {/* Events Section */}
             <Events />
+            <Workshops/>
         </div>
     );
 };
