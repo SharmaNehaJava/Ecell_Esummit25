@@ -1,7 +1,7 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useState } from "react";
 
-const EventsSection = () => {
+const Events= () => {
   return (
     <section className="min-h-screen py-16 bg-gradient-to-b from-gray-950 to-black px-4">
       {/* Title */}
@@ -32,10 +32,6 @@ const TiltCard = ({ event, index }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   
-  // Calculate background gradient based on index
-  const hue = (index * 30) % 360;
-  const bgGradient = `linear-gradient(135deg, hsl(${hue}, 80%, 60%), hsl(${(hue + 30) % 360}, 80%, 50%)`;
-
   // Tilt transformation
   const rotateX = useTransform(y, [-100, 100], [15, -15]);
   const rotateY = useTransform(x, [-100, 100], [-15, 15]);
@@ -43,8 +39,8 @@ const TiltCard = ({ event, index }) => {
     y,
     [-100, 100],
     [
-      `0 25px 45px -15px hsla(${hue}, 100%, 50%, 0.3)`,
-      `0 -25px 45px -15px hsla(${hue}, 100%, 50%, 0.3)`
+      "0 25px 45px -15px rgba(0,0,0,0.5)",
+      "0 -25px 45px -15px rgba(0,0,0,0.5)"
     ]
   );
 
@@ -75,16 +71,23 @@ const TiltCard = ({ event, index }) => {
       whileHover={{ scale: 1.03 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
-      {/* Background Gradient */}
+      {/* Background Image with overlay */}
       <motion.div 
-        className="absolute inset-0"
-        style={{ background: bgGradient }}
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${event.image})` }}
         animate={{
-          opacity: isHovered ? 0.9 : 0.8,
-          scale: isHovered ? 1.1 : 1
+          scale: isHovered ? 1.1 : 1,
         }}
-        transition={{ duration: 0.3 }}
-      />
+        transition={{ duration: 0.5 }}
+      >
+        <motion.div 
+          className="absolute inset-0 bg-black/60"
+          animate={{
+            opacity: isHovered ? 0.7 : 0.9
+          }}
+          transition={{ duration: 0.3 }}
+        />
+      </motion.div>
 
       {/* Content */}
       <div className="relative h-full p-6 flex flex-col justify-between text-white" style={{ transformStyle: "preserve-3d" }}>
@@ -107,7 +110,10 @@ const TiltCard = ({ event, index }) => {
 
         <motion.p 
           className="text-lg mb-6"
-          animate={{ y: isHovered ? -3 : 0 }}
+          animate={{ 
+            y: isHovered ? -3 : 0,
+            opacity: isHovered ? 1 : 0.9
+          }}
           transition={{ duration: 0.3, delay: 0.1 }}
         >
           {event.description}
@@ -128,7 +134,11 @@ const TiltCard = ({ event, index }) => {
           <motion.button
             className="px-6 py-2 bg-white text-black rounded-full font-medium"
             animate={{ y: isHovered ? -3 : 0 }}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ 
+              scale: 1.05,
+              backgroundColor: "#fbbf24", // yellow-400
+              color: "#000"
+            }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.3, delay: 0.2 }}
           >
@@ -140,55 +150,65 @@ const TiltCard = ({ event, index }) => {
   );
 };
 
+
+
 const events = [
   {
     date: "April 16, 2025",
     title: "Grand Opening",
     time: "9:00 AM - 5:30 PM",
-    description: "Keynote speech, startup exhibition, ideathon competition, pitching competition, and cultural events."
+    description: "Keynote speech, startup exhibition, ideathon competition, pitching competition, and cultural events.",
+    image: "/events/1.avif"
   },
   {
     date: "April 16, 2025",
     title: "Vyapar Mela",
     time: "11:00 AM - 4:00 PM",
-    description: "Startup Exhibition & Business Stalls showcasing innovative products and services."
+    description: "Startup Exhibition & Business Stalls showcasing innovative products and services.",
+    image: "/events/2.jpg"
   },
   {
     date: "April 16, 2025",
     title: "IDEASURGE 2.0",
     time: "11:00 AM - 4:00 PM",
-    description: "Ideathon Competition for budding entrepreneurs to pitch their innovative ideas."
+    description: "Ideathon Competition for budding entrepreneurs to pitch their innovative ideas.",
+    image: "/events/3.jpg"
   },
   {
     date: "April 16, 2025",
     title: "Sharda Tank",
     time: "11:00 AM - 4:00 PM",
-    description: "Pitching Competition where startups present to investors and industry experts."
+    description: "Pitching Competition where startups present to investors and industry experts.",
+    image: "/events/4.jpg"
   },
   {
     date: "April 16, 2025",
     title: "PRENEURS TALK",
     time: "11:00 AM - 1:00 PM",
-    description: "Success Stories of Entrepreneurs sharing their journey and insights."
+    description: "Success Stories of Entrepreneurs sharing their journey and insights.",
+    image: "/events/5.jpg"
   },
   {
     date: "April 17, 2025",
     title: "Business Plan Competition",
     time: "10:00 AM - 4:00 PM",
-    description: "Competition for the most viable and innovative business plans."
+    description: "Competition for the most viable and innovative business plans.",
+    image: "/events/6.jpg"
   },
   {
     date: "April 17, 2025",
     title: "Logo & Brand Challenge",
     time: "10:00 AM - 4:00 PM",
-    description: "Competition to design the most creative and effective brand identities."
+    description: "Competition to design the most creative and effective brand identities.",
+    image: "/events/7.jpg"
   },
   {
     date: "April 17, 2025",
     title: "Closing Ceremony",
     time: "4:00 PM - 5:00 PM",
-    description: "Final remarks, awards distribution, and conclusion of E-Summit 2025."
+    description: "Final remarks, awards distribution, and conclusion of E-Summit 2025.",
+    image: "/events/8.jpg"
   }
 ];
 
-export default EventsSection;
+export default Events;

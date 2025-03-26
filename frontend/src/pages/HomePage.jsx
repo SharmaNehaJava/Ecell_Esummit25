@@ -2,42 +2,35 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
-import Events from "./Events";
-import Workshops from "./Workshops";
+import Venus from "./Venus";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const HomePage = () => {
     const containerRef = useRef(null);
     const welcomeBoxRef = useRef(null);
-    const particlesInit = async (engine) => await loadFull(engine);
+    const rocketRef = useRef(null);
     const [isHovered, setIsHovered] = useState(false);
+    const [isRocketHovered, setIsRocketHovered] = useState(false);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end end"],
     });
 
-    // Enhanced scroll-based animations
+    // Scroll-based animations
     const textOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
-    const summitScale = useTransform(scrollYProgress, [0.15, 0.3], [1, 3]);
-    const summitOpacity = useTransform(scrollYProgress, [0.3, 0.4], [1, 0]);
-    const videoBrightness = useTransform(scrollYProgress, [0, 0.5], [0.3, 1]);
-    const titleY = useTransform(scrollYProgress, [0, 0.3], [0, -200]);
-    const subtitleY = useTransform(scrollYProgress, [0, 0.3], [0, -100]);
+    const summitScale = useTransform(scrollYProgress, [0.15, 0.3], [1, 1.2]);
+    const venusOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
 
     useEffect(() => {
-        // GSAP animations for floating elements
-        gsap.utils.toArray(".float-element").forEach((element) => {
-            gsap.to(element, {
-                y: 20,
-                duration: 3,
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut"
-            });
+        // Rocket floating animation
+        gsap.to(rocketRef.current, {
+            y: -20,
+            duration: 3,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
         });
 
         // Welcome box animation
@@ -60,194 +53,108 @@ const HomePage = () => {
 
     return (
         <div ref={containerRef} className="relative w-full h-auto bg-black text-white overflow-hidden">
-            {/* Particle Background */}
-            <div className="absolute inset-0 z-0">
-                <Particles
-                    init={particlesInit}
-                    options={{
-                        particles: {
-                            number: {
-                                value: 80,
-                                density: {
-                                    enable: true,
-                                    value_area: 800
-                                }
-                            },
-                            color: {
-                                value: ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A"]
-                            },
-                            shape: {
-                                type: "circle",
-                                stroke: {
-                                    width: 0,
-                                    color: "#000000"
-                                }
-                            },
-                            opacity: {
-                                value: 0.5,
-                                random: true,
-                                anim: {
-                                    enable: true,
-                                    speed: 1,
-                                    opacity_min: 0.1,
-                                    sync: false
-                                }
-                            },
-                            size: {
-                                value: 3,
-                                random: true,
-                                anim: {
-                                    enable: true,
-                                    speed: 2,
-                                    size_min: 0.3,
-                                    sync: false
-                                }
-                            },
-                            line_linked: {
-                                enable: true,
-                                distance: 150,
-                                color: "#ffffff",
-                                opacity: 0.2,
-                                width: 1
-                            },
-                            move: {
-                                enable: true,
-                                speed: 1,
-                                direction: "none",
-                                random: true,
-                                straight: false,
-                                out_mode: "out",
-                                bounce: false,
-                                attract: {
-                                    enable: true,
-                                    rotateX: 600,
-                                    rotateY: 1200
-                                }
-                            }
-                        },
-                        interactivity: {
-                            detect_on: "canvas",
-                            events: {
-                                onhover: {
-                                    enable: true,
-                                    mode: "grab"
-                                },
-                                onclick: {
-                                    enable: true,
-                                    mode: "push"
-                                },
-                                resize: true
-                            },
-                            modes: {
-                                grab: {
-                                    distance: 140,
-                                    line_linked: {
-                                        opacity: 0.5
-                                    }
-                                },
-                                push: {
-                                    particles_nb: 4
-                                }
-                            }
-                        },
-                        retina_detect: true
-                    }}
-                />
-            </div>
+            {/* Venus Background */}
+            <motion.div 
+                className="fixed inset-0 z-0"
+                style={{ opacity: venusOpacity }}
+            >
+                <Venus scale={0.7} />
+            </motion.div>
 
             {/* First Section - Hero */}
-            <div className="relative w-full flex flex-col items-center justify-center min-h-screen text-center p-6 z-10">
-                {/* Floating elements */}
-                <motion.div 
-                    className="float-element absolute top-1/4 left-1/4 w-16 h-16 rounded-full bg-purple-500/20 blur-xl"
-                    style={{ x: -50, y: -50 }}
-                />
-                <motion.div 
-                    className="float-element absolute top-3/4 right-1/4 w-24 h-24 rounded-full bg-blue-500/20 blur-xl"
-                    style={{ x: 50, y: 50 }}
-                />
-                
-                {/* University Name */}
-                <motion.h4 
-                    style={{ opacity: textOpacity, y: subtitleY }}
-                    className="text-xl md:text-3xl font-light tracking-widest text-gray-300 relative z-10 mb-4"
-                >
-                    SHARDA UNIVERSITY PRESENTS
-                </motion.h4>
-                
-                {/* Main Title */}
-                <motion.div 
-                    style={{ y: titleY }}
-                    className="relative z-10"
-                >
-                    <motion.h1
-                        style={{ scale: summitScale, opacity: summitOpacity }}
-                        className="text-6xl md:text-9xl font-extrabold tracking-tighter mb-4 relative"
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                    >
-                        <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-orange-500 bg-clip-text text-transparent">
-                            E-SUMMIT '25
-                        </span>
-                        <AnimatePresence>
-                            {isHovered && (
-                                <motion.span
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: 10 }}
-                                    className="absolute text-xl md:text-2xl font-normal text-orange-400"
-                                >
-                                    ✨ 
-                                </motion.span>
-                            )}
-                        </AnimatePresence>
-                    </motion.h1>
-                </motion.div>
-                
-                {/* Date and Tagline */}
-                <motion.div 
-                    style={{ opacity: textOpacity }}
-                    className="mt-8 relative z-10"
-                >
-                    <motion.p 
-                        className="text-2xl md:text-3xl font-medium text-gray-300 mb-2"
+            <div className="relative w-full flex flex-col items-center justify-center h-screen text-center p-6 z-10">
+                <div className="flex flex-col items-center justify-center h-full w-full max-w-6xl mx-auto  ">
+                    {/* University Name - Top */}
+                    <motion.h4 
+                        style={{ opacity: textOpacity }}
+                        className="font-sans text-xl md:text-2xl font-light tracking-wider text-gray-300 mt-16"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.3, duration: 1 }}
                     >
-                        <span className="text-white font-bold">16-17 APRIL 2025</span>
-                    </motion.p>
-                    <motion.p 
-                        className="text-xl md:text-2xl font-light text-gray-400"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.7 }}
+                        SHARDA UNIVERSITY PRESENTS
+                    </motion.h4>
+                    
+                    {/* Centered Logo */}
+                    <motion.div 
+                        className="flex-1 flex flex-col items-center justify-center w-full"
+                        style={{ y: 0 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1 }}
                     >
-                        COLLABORATE TO CONQUER
-                    </motion.p>
-                </motion.div>
-                
-                {/* Animated Down Arrow */}
-                <motion.div 
-                    className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10"
-                    animate={{ y: [0, 10, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                    <svg 
-                        width="24" 
-                        height="24" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="2" 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round"
-                        className="text-gray-400 w-8 h-8 mx-auto"
-                    >
-                        <path d="M12 5v14M19 12l-7 7-7-7"/>
-                    </svg>
-                    <p className="text-xs text-gray-400 mt-2">SCROLL DOWN</p>
-                </motion.div>
+                        <motion.div
+                            style={{ scale: summitScale }}
+                            className="relative w-full flex justify-center"
+                        >
+                            <img 
+                                src="/Esummit.png" 
+                                alt="E-Summit" 
+                                className="w-full max-w-md md:max-w-2xl h-auto " 
+                            />
+                            
+                        </motion.div>
+                    </motion.div>
+                    
+                    {/* Date and Tagline - Bottom */}
+                    <div className="w-full flex flex-col items-center">
+                        <motion.div 
+                            style={{ opacity: textOpacity }}
+                            className="mt-4 md:mt-8"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.5, duration: 1 }}
+                        >
+                            <motion.p 
+                                className="text-xl md:text-2xl font-medium text-gray-300 mb-2 md:mb-4"
+                            >
+                                <span className="text-white font-bold">16-17 APRIL 2025</span>
+                            </motion.p>
+                            <motion.p 
+                                className="text-lg md:text-xl font-light text-gray-400"
+                                animate={{
+                                    letterSpacing: ["0.05em", "0.1em"]
+                                }}
+                                transition={{
+                                    duration: 4,
+                                    repeat: Infinity,
+                                    repeatType: "reverse",
+                                    ease: "easeInOut"
+                                }}
+                            >
+                                COLLABORATE TO CONQUER
+                            </motion.p>
+                        </motion.div>
+                        
+                        {/* Scroll Indicator - Bottom */}
+                        <motion.div 
+                            className="mt-8 md:mt-12"
+                            animate={{ y: [0, 8, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        >
+                            <svg 
+                                width="24" 
+                                height="24" 
+                                viewBox="0 0 24 24" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                strokeWidth="2" 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round"
+                                className="text-gray-400 w-6 h-6 mx-auto"
+                            >
+                                <path d="M12 5v14M19 12l-7 7-7-7"/>
+                            </svg>
+                            <motion.p 
+                                className="text-xs text-gray-400 mt-2 tracking-widest"
+                                animate={{ opacity: [0.6, 0.9, 0.6] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                            >
+                                SCROLL DOWN
+                            </motion.p>
+                        </motion.div>
+                    </div>
+                </div>
             </div>
 
             {/* Video Section */}
@@ -257,8 +164,7 @@ const HomePage = () => {
                     muted
                     loop
                     playsInline
-                    style={{ filter: `brightness(${videoBrightness})` }}
-                    className="absolute top-0 left-0 w-full h-full object-cover opacity-70"
+                    className="absolute top-0 left-0 w-full h-full object-cover opacity-80"
                 >
                     <source src="/video.mp4" type="video/mp4" />
                 </motion.video>
@@ -266,10 +172,10 @@ const HomePage = () => {
                 {/* Welcome Box */}
                 <motion.div
                     ref={welcomeBoxRef}
-                    className="mx-auto p-8 md:p-10 text-white rounded-xl max-w-4xl shadow-2xl text-center backdrop-blur-md bg-white/10 border border-white/20"
+                    className="mx-auto p-6 md:p-8 text-white rounded-lg max-w-3xl shadow-lg text-center backdrop-blur-sm bg-black/50 border border-white/10"
                 >
                     <motion.h2 
-                        className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-500"
+                        className="text-3xl md:text-4xl font-bold mb-6"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
@@ -278,37 +184,31 @@ const HomePage = () => {
                     </motion.h2>
                     
                     <motion.p 
-                        className="mt-6 text-lg md:text-xl text-gray-300 leading-relaxed"
+                        className="text-base md:text-lg text-gray-300 leading-relaxed mb-6"
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
                     >
-                        <span className="font-bold text-white">🚀 The Epicenter of Innovation & Excellence 🚀</span>
-                        <br /><br />
-                        Sharda University's E-Summit has been the <span className="text-orange-400 font-semibold">hub of entrepreneurial spirit</span>, 
+                        Sharda University's E-Summit has been the <span className="text-white font-medium">hub of entrepreneurial spirit</span>, 
                         groundbreaking ideas, and transformative leadership. This year, we unite visionaries, 
-                        industry leaders, and young innovators to <span className="text-pink-400 font-semibold">redefine the future</span> of business and technology.
+                        industry leaders, and young innovators to <span className="text-white font-medium">redefine the future</span> of business and technology.
                     </motion.p>
                     
                     <motion.div 
-                        className="mt-8 flex flex-col md:flex-row justify-center gap-4"
+                        className="flex flex-col md:flex-row justify-center gap-3 md:gap-4"
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.6 }}
                     >
-                        <div className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-medium">
+                        <div className="px-4 py-2 md:px-6 md:py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-medium text-sm md:text-base">
                             📅 16-17 APRIL 2025
                         </div>
-                        <div className="px-6 py-3 border border-orange-400 text-orange-400 rounded-full font-medium">
+                        <div className="px-4 py-2 md:px-6 md:py-3 border border-orange-400 text-orange-400 rounded-full font-medium text-sm md:text-base">
                             💡 COLLABORATE · INNOVATE · CONQUER
                         </div>
                     </motion.div>
                 </motion.div>
             </div>
-
-            {/* Events Section */}
-            <Events />
-            <Workshops/>
         </div>
     );
 };
