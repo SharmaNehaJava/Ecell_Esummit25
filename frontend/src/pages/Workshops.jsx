@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
-import { animate, inView } from 'framer-motion';
+import { useEffect } from "react";
+import { animate, inView } from "framer-motion";
+import Particles from "../components/Particles";
 
 const Workshops = () => {
   useEffect(() => {
@@ -54,55 +55,72 @@ const Workshops = () => {
   ];
 
   return (
-    <div className="bg-black text-white overflow-x-hidden">
-      {/* Header */}
-      <section className=" flex flex-col justify-center items-center bg-gradient-to-b from-gray-900 to-black ">
-        <h1 className="pt-10 text-6xl md:text-8xl font-bold  text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
-          WORKSHOPS
-        </h1>
-        <p className="text-md text-end text-gray-400 max-w-md  pb-20  ">
-          Hands-on sessions with industry experts
-        </p>
-        
-      </section>
-
-      {/* Workshop Sections */}
-      {workshops.map((workshop, index) => (
-        <section 
-          key={index}
-          className={`h-1/2 flex ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}
-        >
-          {/* Content Side */}
-          <div className="w-1/2 h-full flex flex-col justify-center p-12 workshop-content opacity-0">
-            <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${workshop.color}`}>
-              {workshop.title}
-            </h2>
-            <p className="text-lg text-gray-300 mb-8 max-w-lg">
-              {workshop.details}
-            </p>
-            <div className="flex items-center">
-              <svg className="w-6 h-6 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span className="text-gray-400">{workshop.time}</span>
-            </div>
-            <button className="mt-8 px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-lg font-medium w-fit hover:opacity-90 transition-opacity">
-              Register Now
-            </button>
-          </div>
-
-          {/* Image Side */}
-          <div className="w-1/2 h-full workshop-image opacity-0">
-            <img 
-              src={workshop.image} 
-              alt={workshop.title}
-              className="w-full h-full object-cover object-center"
-            />
-          </div>
+    <div className="relative w-full min-h-screen bg-black overflow-hidden">
+      {/* Particle Background only for Workshop page */}
+      <div className="absolute inset-0 w-full h-full z-0">
+        <Particles
+          particleColors={['#ffffff', '#ffffff']}
+          particleCount={200}
+          particleSpread={10}
+          speed={0.1}
+          particleBaseSize={100}
+          moveParticlesOnHover={true}
+          alphaParticles={false}
+          disableRotation={false}
+        />
+      </div>
+  
+      {/* Workshop Content */}
+      <div className="relative z-10">
+        {/* Header */}
+        <section className="flex flex-col justify-center items-center px-4 text-center pt-20">
+          <h1 className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
+            WORKSHOPS
+          </h1>
+          <p className="text-md text-gray-400 mt-4 mb-20 max-w-lg">
+            Hands-on sessions with industry experts
+          </p>
         </section>
-      ))}
+  
+        {/* Workshop Sections */}
+        <div className="space-y-32 pb-32">
+          {workshops.map((workshop, index) => (
+            <section
+              key={index}
+              className={`flex flex-col md:flex-row ${
+                index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+              } items-center gap-12 px-6 md:px-20`}
+            >
+              <div className="workshop-content opacity-0 rounded-xl p-8 md:p-12 w-full md:w-1/2">
+                <h2 className={`text-3xl md:text-5xl font-bold mb-4 ${workshop.color}`}>
+                  {workshop.title}
+                </h2>
+                <p className="text-gray-300 mb-6 text-base md:text-lg">{workshop.details}</p>
+                <div className="flex items-center text-gray-400 mb-6">
+                  <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  {workshop.time}
+                </div>
+                <button className="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-2 rounded-full text-white font-semibold hover:opacity-90 transition duration-300">
+                  Register Now
+                </button>
+              </div>
+  
+              <div className="workshop-image opacity-0 w-full md:w-1/2 shadow-2xl rounded-xl overflow-hidden">
+                <img
+                  src={workshop.image}
+                  alt={workshop.title}
+                  className="w-full h-full object-cover rounded-xl"
+                />
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
     </div>
   );
+  
 };
 
 export default Workshops;

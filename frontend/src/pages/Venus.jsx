@@ -11,9 +11,9 @@ const Venus = () => {
     const scene = new THREE.Scene();
 
     // Camera setup - positioned to show only top half of Venus
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 22;
-    camera.position.y = 0; // Centered vertically
+    const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.2, 500);
+    camera.position.z = 20;
+    camera.position.y = 0.3; // Centered vertically
 
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({ 
@@ -38,7 +38,7 @@ const Venus = () => {
     // Configure star background
     starTexture.wrapS = THREE.RepeatWrapping;
     starTexture.wrapT = THREE.RepeatWrapping;
-    starTexture.repeat.set(2, 2);
+    starTexture.repeat.set(1, 1);
     scene.background = starTexture;
 
     // Create Venus sphere (full sphere initially)
@@ -80,15 +80,15 @@ const Venus = () => {
     // scene.add(glow);
 
     // Lighting
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-    directionalLight.position.set(100, 30, 50);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 5);
+    directionalLight.position.set(100, 0, 60);
     scene.add(directionalLight);
 
     const ambientLight = new THREE.AmbientLight(0x404040, 0.9);
     scene.add(ambientLight);
 
     // Venus' atmospheric light
-    const venusLight = new THREE.PointLight(0xff9966, 1.9, 100);
+    const venusLight = new THREE.PointLight(0xff9966, 2.9, 100);
     venusLight.position.set(0, -venusRadius, 0);
     scene.add(venusLight);
 

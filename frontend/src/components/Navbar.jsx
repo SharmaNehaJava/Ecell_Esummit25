@@ -38,7 +38,7 @@ export default function Navbar() {
             <div className="container mx-auto flex items-center justify-between ">
 
                 {/* Logo - Left */}
-                <img src="/logo.png" alt="E-Cell logo" className="h-20" />
+                <img src="/logo.png" alt="E-Cell logo" className="h-20 w-20" />
 
                 {/* Desktop Menu - Centered */}
                 <ul className="hidden md:flex space-x-8 text-white text-lg font-medium mx-auto">
@@ -57,16 +57,21 @@ export default function Navbar() {
                 <motion.button
                     whileHover={{
                         scale: 1.1,
-                        backgroundColor: "#FFFFFF",
-                        color: "#3B82F6",
-                        borderColor: "#3B82F6",
-                        transition: { duration: 0.15 }, // Fast hover effect
+                        border:"1px solid #ffff00",
                     }}
                     whileTap={{ scale: 0.95 }}
-                    className="hidden md:block border-2 border-blue-500 bg-transparent text-blue-500 px-5 py-2 rounded-4xl font-semibold transition-all duration-150 ease-in"
+                    className="hidden md:block relative overflow-hidden border-2 border-blue-500 bg-transparent px-5 py-2 rounded-4xl font-semibold transition-all duration-300 ease-in-out group"
                 >
-                    Register
+                    {/* Always-shining gradient text */}
+                    <span
+                     className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-white to-blue-400 animate-shine font-bold group-hover:text-yellow-500">
+                        Register
+                    </span>
+
+                    {/* Shiny layer */}
+                    <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/60 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[2000ms] ease-in-out pointer-events-none" />
                 </motion.button>
+
 
                 {/* Mobile Menu Button */}
                 <button className="md:hidden text-white text-2xl" onClick={() => setIsOpen(!isOpen)}>
